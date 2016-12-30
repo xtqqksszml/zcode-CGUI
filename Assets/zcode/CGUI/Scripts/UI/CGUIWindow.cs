@@ -98,11 +98,8 @@ namespace CGUI
         /// <summary>
         ///   
         /// </summary>
-        public CGUIWindow()
-        {
-            //窗口默认为关闭
-            Visible = false;
-        }
+        protected CGUIWindow()
+        { }
 
         /// <summary>
         /// 弹至最上层
@@ -342,6 +339,17 @@ namespace CGUI
         private static T _GetComponent<T>(CGUIWindow w) where T : Component
         {
             return w != null ? w.GetComponent<T>() : null;
+        }
+        #endregion
+
+        #region MonoBehaviour
+        /// <summary>
+        /// 
+        /// </summary>
+        void Awake()
+        {
+            //窗口默认为关闭
+            Visible = false;
         }
         #endregion
     }

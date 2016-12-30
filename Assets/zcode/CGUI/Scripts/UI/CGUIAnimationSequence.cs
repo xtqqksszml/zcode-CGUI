@@ -28,15 +28,11 @@ namespace CGUI
         /// </summary>
         private Queue<Element> sequence_;
 
-
         /// <summary>
         /// 
         /// </summary>
-        public CGUIAnimationSequence()
-        {
-            is_play_queued_ = false;
-            sequence_ = new Queue<Element>();
-        }
+        protected CGUIAnimationSequence()
+        { }
 
         /// <summary>
         /// 
@@ -96,5 +92,16 @@ namespace CGUI
             CGUIManager.Instance.ToggleEvent(true);
             yield return 0;
         }
+
+        #region MonoBehaviour
+        /// <summary>
+        /// 
+        /// </summary>
+        void Awake()
+        {
+            is_play_queued_ = false;
+            sequence_ = new Queue<Element>();
+        }
+        #endregion
     }
 }

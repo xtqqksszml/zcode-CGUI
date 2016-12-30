@@ -22,17 +22,17 @@ namespace CGUI
         /// <summary>
         ///   
         /// </summary>
-        private long frame_count_ = 0;
+        private long frame_count_;
 
         /// <summary>
         ///   
         /// </summary>
-        private long last_frame_time = 0;
+        private long last_frame_time;
 
         /// <summary>
         ///   
         /// </summary>
-        static long last_fps_ = 0;
+        static long last_fps_;
 
         /// <summary>
         ///   
@@ -67,14 +67,7 @@ namespace CGUI
             return tick / (10 * 1000);
         }
 
-        /// <summary>
-        ///   MonoBehaviour.Start
-        /// </summary>
-        void Start()
-        {
-
-        }
-
+        #region MonoBehaviour
         /// <summary>
         ///   MonoBehaviour.Update
         /// </summary>
@@ -82,6 +75,7 @@ namespace CGUI
         {
             UpdateTick();
         }
+        #endregion
     }
 }
 

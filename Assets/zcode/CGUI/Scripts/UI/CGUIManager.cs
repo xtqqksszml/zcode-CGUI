@@ -44,10 +44,8 @@ namespace CGUI
         /// <summary>
         /// 
         /// </summary>
-        public CGUIManager()
-        {
-            windows_ = new Dictionary<System.Type, List<CGUIWindow>>();
-        }
+        protected CGUIManager()
+        { }
 
         /// <summary>
         /// 创建界面
@@ -422,6 +420,8 @@ namespace CGUI
         /// </summary>
         void Awake()
         {
+            windows_ = new Dictionary<System.Type, List<CGUIWindow>>();
+
             InitializeWindowLayerDepth();
             DoSceenResolutionAdaptive();
 
