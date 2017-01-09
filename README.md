@@ -29,6 +29,9 @@
 	
 ## 如何使用
 	直接使用Unity打开，zcode/CGUI/Examples目录下包含多个Examples，展示了GUI系统的主要用法。
+	
+## 联系作者
+	邮箱：xtqqksszml@163.com
 
 ## 版权声明
 	插件使用 Apache License 2.0 协议.
