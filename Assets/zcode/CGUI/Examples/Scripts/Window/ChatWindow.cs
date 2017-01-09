@@ -26,7 +26,7 @@ public class ChatWindow : CGUIWindow
     /// </summary>
     public override CGUI.WindowHidePlan HidePlan
     {
-        get { return CGUI.WindowHidePlan.Delete; }
+        get { return CGUI.WindowHidePlan.Scale0; }
     }
     #endregion
 
@@ -69,9 +69,18 @@ public class ChatWindow : CGUIWindow
         OnChatSend();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public void OnClick_Close(GameObject go)
+    {
+        Hide();
+    }
+
     void Awake()
     {
         UIEventListener.Get(((GameObject)this["Background/Send"])).onClick += OnClick_Send;
+        UIEventListener.Get(((GameObject)this["Background/Close"])).onClick += OnClick_Close;
 
         information_ = (UILabel)this["Background/Information"];
     }

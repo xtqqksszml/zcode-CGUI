@@ -32,6 +32,7 @@ namespace CGUI
         Hide,           // 隐藏
         Delete,         // 删除
         OutSide,        // 移出边界
+        Scale0,         // 缩小为0
     }
 
     /// <summary>

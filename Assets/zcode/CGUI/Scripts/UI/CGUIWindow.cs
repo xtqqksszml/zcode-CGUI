@@ -135,6 +135,10 @@ namespace CGUI
                 transform.localPosition = new Vector2(transform.localPosition.x - CGUI.Constant.WINDOW_OUTSIDE_OFFSET,
                                                       transform.localPosition.y);
             }
+            else if (HidePlan == CGUI.WindowHidePlan.Scale0)
+            {
+                transform.localScale = Vector3.one;
+            }
 
             BringForward();
 
@@ -163,6 +167,10 @@ namespace CGUI
             {
                 transform.localPosition = new Vector2(transform.localPosition.x + CGUI.Constant.WINDOW_OUTSIDE_OFFSET,
                                                       transform.localPosition.y);
+            }
+            else if (HidePlan == CGUI.WindowHidePlan.Scale0)
+            {
+                transform.localScale = Vector3.zero;
             }
 
             OnHide();
