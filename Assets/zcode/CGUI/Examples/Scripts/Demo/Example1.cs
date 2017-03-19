@@ -16,7 +16,7 @@ public class Example1 : MonoBehaviour
 	void Start () 
 	{
         var win = CGUI.CGUIManager.Instance.CreateWindow<FirstAnimationWindow>();
-        win.PlayShowAnimation();
+        win.Show(true);
 	}
 	
 	/// <summary>

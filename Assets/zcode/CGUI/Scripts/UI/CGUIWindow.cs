@@ -86,21 +86,41 @@ namespace CGUI
         }
 
         /// <summary>
-        /// 显示动画
+        /// 获得子控件
         /// </summary>
-        private System.Func<IEnumerator> show_animation_ = null;
+        public CGUIControl this[string name]
+        {
+            get
+            {
+                try
+                {
+                    Transform child = transform.FindChild(name);
+                    if (child != null)
+                        return new CGUIControl(child.gameObject);
+                }
+                catch (System.Exception)
+                {
+                    Debug.Log("Cann't find GuiControl, Name is " + name);
+                }
 
-        /// <summary>
-        /// 隐藏动画
-        /// </summary>
-        private System.Func<IEnumerator> hide_animation_ = null;
+#if UNITY_EDITOR
+                return null;
+#else
+            return CGUIControl.Invalid;
+#endif
+            }
+        }
 
         /// <summary>
         ///   
         /// </summary>
         protected CGUIWindow()
-        { }
+        {
+            //窗口默认为关闭
+            Visible = false;
+        }
 
+        #region Layer
         /// <summary>
         /// 弹至最上层
         /// </summary>
@@ -116,11 +136,64 @@ namespace CGUI
         {
             CGUIManager.Instance.PushBack(this);
         }
+        #endregion
+
+        #region Show/Hide
+        /// <summary>
+        ///   显示
+        /// <param name="is_animation">是否播放动画</param>
+        /// <param name="is_queued">是否插入动画序列器播放</param>
+        /// <param name="callback">回调</param>
+        /// </summary>
+        public void Show(bool is_animation = false, bool is_queued = false, System.Action callback = null)
+        {
+            if (Visible)
+                return;
+            if(is_animation)
+            {
+                if(is_queued)
+                    CGUIManager.Instance.AnimationSequence.PlayQueued(_PlayShowAnimation, callback);
+                else
+                {
+                    CGUIManager.Instance.AnimationSequence.Play(_PlayShowAnimation, callback);
+                }
+            }
+            else
+            {
+                _Show();
+            }
+        }
+
+        /// <summary>
+        ///   隐藏
+        /// <param name="is_animation">是否播放动画</param>
+        /// <param name="is_queued">是否插入动画序列器播放</param>
+        /// <param name="callback">回调</param>
+        /// </summary>
+        public void Hide(bool is_animation = false, bool is_queued = false, System.Action callback = null)
+        {
+            if (!Visible)
+                return;
+            if (is_animation)
+            {
+                if (is_queued)
+                    CGUIManager.Instance.AnimationSequence.PlayQueued(_PlayHideAnimation, callback);
+                else
+                {
+                    CGUIManager.Instance.AnimationSequence.Play(_PlayHideAnimation, callback);
+                }
+            }
+            else
+            {
+                _Hide();
+            }
+
+        }
 
         /// <summary>
         /// 显示
         /// </summary>
-        public void Show()
+        void _Show()
         {
             if (Visible)
                 return;
@@ -148,7 +221,7 @@ namespace CGUI
         /// <summary>
         /// 隐藏
         /// </summary>
-        public void Hide()
+        void _Hide()
         {
             if (!Visible)
                 return;
@@ -185,115 +258,43 @@ namespace CGUI
         /// 隐藏
         /// </summary>
         protected virtual void OnHide() { }
-
-        /// <summary>
-        /// 获得子控件
-        /// </summary>
-        public CGUIControl this[string name]
-        {
-            get
-            {
-                try
-                {
-                    Transform child = transform.FindChild(name);
-                    if (child != null)
-                        return new CGUIControl(child.gameObject);
-                }
-                catch (System.Exception)
-                {
-                    Debug.Log("Cann't find GuiControl, Name is " + name);
-                }
-
-#if UNITY_EDITOR
-                return null;
-#else
-            return CGUIControl.Invalid;
-#endif
-            }
-        }
+        #endregion
 
         #region Animation
         /// <summary>
-        /// 显示界面并播放显示动画
+        ///   
         /// </summary>
-        public void PlayShowAnimation(System.Action callback = null)
-        {
-            CGUIManager.Instance.AnimationSequence.Play(_PlayShowAnimation, callback);
-        }
-
-        /// <summary>
-        /// 加入动画序列，等待显示界面并播放显示动画
-        /// </summary>
-        public void PlayQueuedShowAnimation(System.Action callback = null)
-        {
-            CGUIManager.Instance.AnimationSequence.PlayQueued(_PlayShowAnimation, callback);
-        }
         IEnumerator _PlayShowAnimation()
         {
-            Show();
-
-            if (show_animation_ != null)
-                yield return show_animation_();
-
-            yield return 0;
+            _Show();
+            yield return ShowAnimation();
         }
 
         /// <summary>
-        /// 隐藏界面并播放隐藏动画
+        ///   
         /// </summary>
-        public void PlayHideAnimation(System.Action callback = null)
-        {
-            CGUIManager.Instance.AnimationSequence.Play(_PlayHideAnimation, callback);
-        }
-
-        /// <summary>
-        /// 加入动画序列，等待隐藏界面并播放隐藏动画
-        /// </summary>
-        public void PlayQueuedHideAnimation(System.Action callback = null)
-        {
-            CGUIManager.Instance.AnimationSequence.PlayQueued(_PlayHideAnimation, callback);
-        }
         IEnumerator _PlayHideAnimation()
         {
-            if (hide_animation_ != null)
-                yield return hide_animation_();
+            yield return HideAnimation();
+            _Hide();
+        }
 
-            Hide();
-
+        /// <summary>
+        /// 显示动画控制, 派生界面重写此方法编写动画逻辑
+        /// </summary>
+        protected virtual IEnumerator ShowAnimation()
+        {
             yield return 0;
         }
 
         /// <summary>
-        /// 绑定显示动画
+        /// 隐藏动画控制, 派生界面重写此方法编写动画逻辑
         /// </summary>
-        public void BindShowAnimation(System.Func<IEnumerator> animation)
+        protected virtual IEnumerator HideAnimation()
         {
-            show_animation_ = animation;
+            yield return 0;
         }
 
-        /// <summary>
-        /// 取绑显示动画
-        /// </summary>
-        public void UnbindShowAnimation()
-        {
-            show_animation_ = null;
-        }
-
-        /// <summary>
-        /// 绑定隐藏动画
-        /// </summary>
-        public void BindHideAnimation(System.Func<IEnumerator> animation)
-        {
-            hide_animation_ = animation;
-        }
-
-        /// <summary>
-        /// 取绑隐藏动画
-        /// </summary>
-        public void UnbindHideAnimation()
-        {
-            hide_animation_ = null;
-        }
         #endregion
 
         #region NGUI
@@ -347,17 +348,6 @@ namespace CGUI
         private static T _GetComponent<T>(CGUIWindow w) where T : Component
         {
             return w != null ? w.GetComponent<T>() : null;
-        }
-        #endregion
-
-        #region MonoBehaviour
-        /// <summary>
-        /// 
-        /// </summary>
-        void Awake()
-        {
-            //窗口默认为关闭
-            Visible = false;
         }
         #endregion
     }

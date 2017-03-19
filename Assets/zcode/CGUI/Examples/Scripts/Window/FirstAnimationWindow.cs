@@ -39,17 +39,7 @@ public class FirstAnimationWindow : CGUIWindow
     /// <summary>
     /// 
     /// </summary>
-    void BuildAnimation()
-    {
-        cmpt_ = ((GameObject)this["Background"]).GetComponent<TweenPosition>();
-        BindShowAnimation(ShowAnimation);
-        BindHideAnimation(HideAnimation);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    IEnumerator ShowAnimation()
+    protected override IEnumerator ShowAnimation()
     {
         cmpt_.PlayForward();
         while (cmpt_.enabled)
@@ -61,7 +51,7 @@ public class FirstAnimationWindow : CGUIWindow
     /// <summary>
     /// 
     /// </summary>
-    IEnumerator HideAnimation()
+    protected override IEnumerator HideAnimation()
     {
         cmpt_.PlayReverse();
         while (cmpt_.enabled )
@@ -76,14 +66,13 @@ public class FirstAnimationWindow : CGUIWindow
     /// </summary>
     void OnClick_Toggle(GameObject go)
     {
-        PlayHideAnimation();
-        CGUIManager.Instance.CreateWindow<SecondAnimationWindow>().PlayShowAnimation();
+        Hide(true, true);
+        CGUIManager.Instance.CreateWindow<SecondAnimationWindow>().Show(true, true);
     }
 
     void Awake()
     {
         UIEventListener.Get(((GameObject)this["Background/Toggle"])).onClick += OnClick_Toggle;
-
-        BuildAnimation();
+        cmpt_ = ((GameObject)this["Background"]).GetComponent<TweenPosition>();
     }
 }

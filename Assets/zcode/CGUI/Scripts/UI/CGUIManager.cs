@@ -66,6 +66,7 @@ namespace CGUI
 
             //预处理
             obj.SetActive(false);
+            if (!string.IsNullOrEmpty(name)) obj.name = name;        //名称
 
             //记录原始位置
             Vector3 position = obj.transform.localPosition;
@@ -76,8 +77,6 @@ namespace CGUI
             obj.gameObject.layer = parent.layer;
             obj.gameObject.transform.localScale = Vector3.one;
 
-            //名称
-            if (!string.IsNullOrEmpty(name)) window.name = name;
             //位置
             window.Position = position;
 
