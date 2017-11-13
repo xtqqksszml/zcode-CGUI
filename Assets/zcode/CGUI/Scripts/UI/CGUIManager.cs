@@ -116,7 +116,7 @@ namespace CGUI
                     windows_[key].Remove(window);
 
                 UnityEngine.Object.Destroy(window.gameObject);
-
+				Resources.UnloadUnusedAssets();
             }
         }
 
